@@ -2,17 +2,20 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Employee, Department, Role
 from django.db. models import Q
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def index(request):
     return render(request, "index.html")
 
-
+@login_required
 def all_emp(request):
     emps = Employee.objects.all()
     return render(request, "show_all_emp.html", context={"emps": emps})
 
+@login_required
 def add_emp(request):
     if request.method == "GET":
         return render(request,   "add_emp.html")
@@ -30,6 +33,7 @@ def add_emp(request):
         emp.save()
         return redirect("all_emp")
 
+@login_required
 def remove_emp(request, id=0):
     if id:
         try:
@@ -42,6 +46,7 @@ def remove_emp(request, id=0):
     print(emps)
     return render(request, "remove_emp.html", context={"emps": emps})
         
+@login_required
 def filter_emp(request):
     if request.method == "POST":
         print(request.POST)
@@ -61,6 +66,7 @@ def filter_emp(request):
     else:
         return HttpResponse('An Exception Occurred')
     
+@login_required
 def update_emp(request):
     if request.method == "POST":
         id = request.POST.get("id")
